@@ -9,7 +9,7 @@ class Todo(models.Model):
     uid = models.UUIDField(
         primary_key=True,
         editable=False,
-        default=uuid.uuid4(),
+        default=uuid.uuid4,
     )
     user = models.ForeignKey(
         User,
@@ -36,7 +36,7 @@ class TimingTodo(models.Model):
     uid = models.UUIDField(
         primary_key=True,
         editable=False,
-        default=uuid.uuid4(),
+        default=uuid.uuid4,
     )
     todo = models.ForeignKey(Todo, on_delete=models.CASCADE)
     timing = models.DateField()
