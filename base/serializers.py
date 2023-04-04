@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Todo
+from .models import Todo, TimingTodo
 import re
 from django.template.defaultfilters import slugify
 
@@ -20,7 +20,7 @@ class TodoSerializer(serializers.ModelSerializer):
     def validate_todo_title(self, data):
         if data:
             todo_title = data
-            regex = re.compile("[@_!#$%^&*()<>?/\|}{~:]")
+            regex = re.compile("[@_!#$%^&*()<>?/|}{~:\]")
 
             if len(todo_title) < 3:
                 raise serializers.ValidationError("Title too short: char<3")
@@ -33,18 +33,11 @@ class TodoSerializer(serializers.ModelSerializer):
         return data
 
 
-"""
-    def validate(self, validated_data):
-        if validated_data.get("todo_title"):
-            todo_title = validated_data["todo_title"]
-            regex = re.compile("[@_!#$%^&*()<>?/\|}{~:]")
+class TimingTodoSerializer(serializers.ModelSerializer):
+    # To get todo(foreign_key data), serialized accordingly
+    todo = TodoSerializer()
 
-            if len(todo_title) < 3:
-                raise serializers.ValidationError("Title too short: char<3")
-
-            if regex.search(todo_title):
-                raise serializers.ValidationError(
-                    "Invalid todo_title. Cannot contain special characters"
-                )
-
-        return validated_data"""
+    class Meta:
+        model = TimingTodo
+        exclude = ["created_at", "updated_at"]
+        # depth = 1
